@@ -2,7 +2,7 @@
 
 An intelligent outbound call automation and appointment booking pipeline that qualifies leads, schedules appointments, and syncs data with your CRM — all without lifting a finger.
 
-![Workflow Screenshot](./assets/lead_qualifier_workflow.png)
+![Workflow Screenshot](./assets/Complete_workflow.png)
 
 ---
 
@@ -48,7 +48,7 @@ An intelligent outbound call automation and appointment booking pipeline that qu
 
 ## 📸 Screenshot
 
-![Lead Qualifier Flow](./assets/lead_qualifier_workflow.png)
+![Appointment Flow](./assets/appointment_agent.png)
 
 ---
 
@@ -80,9 +80,6 @@ Pull requests and feedback are welcome! For major changes, please open an issue 
 
 For questions, customization requests, or collaborations, feel free to reach out:  
 📧 [Email](mailto:erkrishbhimani@gmail.com)
-
-
-MIT License
 
 ---
 
