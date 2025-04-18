@@ -34,7 +34,7 @@ An intelligent outbound call automation and appointment booking pipeline that qu
 
 ## 🛠️ Installation & Setup
 
-1. **Download the JSON workflow file** → [`lead_qualifier_workflow.json`](./lead_qualifier_workflow.json)  
+1. **Download the JSON workflow file** → [`lead_qualifier_workflow.json`](./Autocall_Lead_Orchestrator.json)  
 2. **Import into n8n** via the workflow import option  
 3. **Set Credentials**  
    - Vapi API Key (Voice Agent)  
@@ -46,10 +46,11 @@ An intelligent outbound call automation and appointment booking pipeline that qu
 
 ---
 
-## 📸 Screenshot
+## 📸
 
 ![Appointment Flow](./assets/appointment_agent.png)
-
+![Lead Flow](./assets/lead_qualify.png)
+![Call Flow](./assets/lead_qualify.png)
 ---
 
 ## 🧩 Use Cases
