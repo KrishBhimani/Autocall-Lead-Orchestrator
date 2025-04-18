@@ -1,0 +1,4139 @@
+{
+  "name": "Autocall Lead Orchestrator",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "c2c42557-663d-480b-bf71-bb3a18ec56b3",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -1880,
+        600
+      ],
+      "id": "d14a1da2-c87d-4fe2-aca7-d03623fd8e7c",
+      "name": "Webhook",
+      "webhookId": "c2c42557-663d-480b-bf71-bb3a18ec56b3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "87640d60-4973-4256-8e37-e8c7fc3bf1a8",
+              "leftValue": "={{ $json.fields['ended reason'] }}",
+              "rightValue": "customer-did-not-answer",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "7d0759f2-7c19-45be-bbb9-09db3da6eacc",
+              "leftValue": "={{ $json.fields['ended reason'] }}",
+              "rightValue": "assistant-error",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "bcce32ec-9fc1-4f42-b352-69ed90b8b7a6",
+              "leftValue": "={{ $json.fields['ended reason'] }}",
+              "rightValue": "pip}}}}eline-error-*",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "fb91210a-c14a-432b-ba6d-3c859d5972a4",
+              "leftValue": "={{ $json.fields['ended reason'] }}",
+              "rightValue": "pipeline-error-first-message-failed",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "9104cca1-09aa-4781-9400-3fa998134595",
+              "leftValue": "={{ $json.fields['ended reason'] }}",
+              "rightValue": "pipeline-no-available-llm-model",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "8717e004-1033-4a34-b827-d16c2d147501",
+              "leftValue": "={{ $json.fields['ended reason'] }}",
+              "rightValue": "phone-call-provider-closed-websocket",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "37a69a1f-b6d7-42ce-b20e-d3a8dbc6df92",
+              "leftValue": "={{ $json.fields['ended reason'] }}",
+              "rightValue": "twilio-failed-to-connect-call",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "52f427ca-adbc-4364-a1c0-81c3b23d26a3",
+              "leftValue": "={{ $json.fields['ended reason'] }}",
+              "rightValue": "unknown-error",
+              "operator": {
+                "type": "string",
+                "operation": "notEquals"
+              }
+            },
+            {
+              "id": "fad61fe3-b7e5-4bca-be09-f22f89bdeb4a",
+              "leftValue": "={{ $('Event = end-of-call-report').item.json.body.message.analysis.summary }}",
+              "rightValue": "voicemail",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            },
+            {
+              "id": "7b24dc3c-be9b-4b7a-aa71-83eb0b13b071",
+              "leftValue": "={{ $('Event = end-of-call-report').item.json.body.message.artifact.transcript }}",
+              "rightValue": "leave a message",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -220,
+        200
+      ],
+      "id": "50b96d0f-9d82-4b1a-afd0-8e83ae85537f",
+      "name": "Condition = Answered"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c3457791-6f2c-4c4f-8e92-d73b65c728bc",
+              "leftValue": "={{ $('Event = end-of-call-report').item.json.body.message.endedReason }}",
+              "rightValue": "voicemail",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "058579be-1c16-45db-abe7-dffdc709b015",
+              "leftValue": "={{ $('Event = end-of-call-report').item.json.body.message.endedReason }}",
+              "rightValue": "customer-busy",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "6252cc6b-aa3f-43e0-9dc6-a497a2f303ee",
+              "leftValue": "={{ $('Event = end-of-call-report').item.json.body.message.endedReason }}",
+              "rightValue": "customer-did-not-answer",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "655fde08-4343-4336-b4ec-3f8a9217b384",
+              "leftValue": "={{ $('Event = end-of-call-report').item.json.body.message.endedReason }}",
+              "rightValue": "customer-ended-call",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        0,
+        300
+      ],
+      "id": "8aef8403-7e00-4138-8bbf-d9afcba2088a",
+      "name": "Condition = Voicemail"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "23f6dcb0-0cd3-4d53-995e-7bf6f3e981de",
+              "leftValue": "={{ $json.Attempt }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notExists",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        440,
+        200
+      ],
+      "id": "20d402c3-a180-435b-9055-256582ec1c30",
+      "name": "First Call"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "5dbf49f4-4e26-4684-b86a-13b11de984fe",
+              "leftValue": "={{ $json.Attempt }}",
+              "rightValue": "#1",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        280
+      ],
+      "id": "3a1f95ea-8cc7-4f70-8ce3-0ae7ac13366c",
+      "name": "First Call - Recapture"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b9373607-17cb-466f-a492-9a1e52627d26",
+              "leftValue": "={{ $json.Attempt }}",
+              "rightValue": "#2",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        880,
+        340
+      ],
+      "id": "378d2831-b386-41dc-9f1d-36a4c4321834",
+      "name": "Third Call"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.vapi.ai/call",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ebfc1ea9-0690-440d-b1fb-dce0eeab4906"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"assistantId\": \"3774ac2f-7bac-46ca-8a96-47190a6835e1\",\n  \"customer\": {\n    \"name\": \"{{ $json.fields['First Name'] }}\",\n    \"number\": \"{{ $json.fields.Mobile }}\"\n  },\n  \"phoneNumberId\": \"69636462-48d3-42ed-a6bf-c39a050c2486\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        0
+      ],
+      "id": "ec05edd7-bd40-451c-a3b3-0625482f2ec4",
+      "name": "Call #2"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.vapi.ai/call",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer ebfc1ea9-0690-440d-b1fb-dce0eeab4906"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"assistantId\": \"3774ac2f-7bac-46ca-8a96-47190a6835e1\",\n  \"customer\": {\n    \"name\": \"{{ $json['First Name'] }}\",\n    \"number\": \"{{ $json.Mobile }}\"\n  },\n  \"phoneNumberId\": \"69636462-48d3-42ed-a6bf-c39a050c2486\"\n}",
+        "options": {
+          "batching": {
+            "batch": {
+              "batchSize": 10,
+              "batchInterval": 120000
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        240
+      ],
+      "id": "80817b4a-7866-43b7-9c32-0bfd4c0726c0",
+      "name": "Call #3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "32155059-a744-47e1-879c-f93968fe8a8a",
+              "leftValue": "={{ $json.body.message.type }}",
+              "rightValue": "end-of-call-report",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -700,
+        240
+      ],
+      "id": "ed687876-c45d-4df5-93ad-212b205eb0b9",
+      "name": "Event = end-of-call-report"
+    },
+    {
+      "parameters": {
+        "amount": 1,
+        "unit": "minutes"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1100,
+        0
+      ],
+      "id": "11fdd592-b979-4542-9631-7fc3ba56d999",
+      "name": "1 Minute",
+      "webhookId": "5fa7ede3-e9d0-4ca4-9bac-153fb151df16"
+    },
+    {
+      "parameters": {
+        "resume": "specificTime",
+        "dateTime": "={{ \n  String(\n    $now.plus(1, \"day\")\n      .toDateTime()\n      .setZone(\"Asia/Kolkata\")\n      .set({ hour: 16, minute: 0, second: 0, millisecond: 0 })\n      .toISO()\n  )\n}}"
+      },
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [
+        1100,
+        240
+      ],
+      "id": "59f61b45-1136-4aa3-9c63-0db49a20368b",
+      "name": "+1 Day AND @ 4:00pm (Optimal Call Time)",
+      "webhookId": "0256f738-e954-483c-84e2-af7e213efad0"
+    },
+    {
+      "parameters": {
+        "unit": "minutes"
+      },
+      "name": "Wait for End Report",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1,
+      "position": [
+        -900,
+        440
+      ],
+      "id": "2d3014ba-7487-4007-8668-7620fcd4d9d4",
+      "webhookId": "a776b5eb-dedc-4ce0-bbe4-f092bd069168"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "name": "Respond to Webhook1",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [
+        -900,
+        240
+      ],
+      "id": "83869a72-392f-4d79-9342-6f2ca93a4488"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "ccca2cb4-130d-428a-a361-bcebc170bac9",
+              "leftValue": "={{ $json.body.message.type }}",
+              "rightValue": "end-of-call-report",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1120,
+        440
+      ],
+      "id": "b6da59ef-fcb4-4e61-925f-b50b82b82fb9",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "respondWith": "allIncomingItems",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        -680,
+        520
+      ],
+      "id": "666d7673-01f6-4057-b48e-7db06eef1e6f",
+      "name": "Respond to Webhook2"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "leftValue": "={{ $json.body.message.type }}",
+                    "rightValue": "end-of-call-report",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    },
+                    "id": "aa49de85-6821-4293-b355-ee133622282a"
+                  }
+                ],
+                "combinator": "and"
+              }
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "20faae73-b9fb-4d4a-ba49-32b8f00af6ec",
+                    "leftValue": "={{ $json.body.message.type }}",
+                    "rightValue": "tool-calls",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        -1460,
+        460
+      ],
+      "id": "2eeee982-70e6-483e-b16c-7a309d3a7b02",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "d86411b9-9043-42ff-938a-d35198eee0d4",
+              "name": "number",
+              "value": "={{ $json.body.message.call.customer.number }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1480,
+        780
+      ],
+      "id": "9fa6f98f-61ae-4a90-80af-f38a12d569ac",
+      "name": "Customer Number1"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1mSrzoJp72-ngJsIfQonLG63UpHC-4dGwaFxVpgmoS2A",
+          "mode": "list",
+          "cachedResultName": "Leads Details",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mSrzoJp72-ngJsIfQonLG63UpHC-4dGwaFxVpgmoS2A/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads details",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1mSrzoJp72-ngJsIfQonLG63UpHC-4dGwaFxVpgmoS2A/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Status": "Failed",
+            "Mobile": "={{ $json.number }}",
+            "Summary": "Call not sent"
+          },
+          "matchingColumns": [
+            "Mobile"
+          ],
+          "schema": [
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Attempt",
+              "displayName": "Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Final Call",
+              "displayName": "Final Call",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1300,
+        780
+      ],
+      "id": "11a3a0f3-9f4d-4f12-9529-789762b90c41",
+      "name": "Google Sheets3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c23ecad1-29b2-45a9-a1a0-2ef00914088e",
+              "leftValue": "={{ $json.body.message.type }}",
+              "rightValue": "end-of-call-report",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "or"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -1680,
+        600
+      ],
+      "id": "afeda6b0-8f08-4d8b-aafd-85d91ababfaa",
+      "name": "Event = tool-call1 OR end-of-call-report"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": 1131242239,
+          "mode": "list",
+          "cachedResultName": "Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=1131242239"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Id": "={{ $json.body.message.call.id }}",
+            "callproviderID": "=",
+            "customernumber": "=",
+            "type": "={{ $json.body.message.call.type }}",
+            "started": "={{ $json.body.message.startedAt }}",
+            "ended": "={{ $json.body.message.endedAt }}",
+            "milliseconds": "={{ $json.body.message.durationMs }}",
+            "ended reason": "={{ $json.body.message.endedReason }}",
+            "transcript": "={{ $json.body.message.transcript }}"
+          },
+          "matchingColumns": [
+            "Id"
+          ],
+          "schema": [
+            {
+              "id": "Id",
+              "displayName": "Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "callproviderID",
+              "displayName": "callproviderID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "phoneNumberID",
+              "displayName": "phoneNumberID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customernumber",
+              "displayName": "customernumber",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "type",
+              "displayName": "type",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "started",
+              "displayName": "started",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ended",
+              "displayName": "ended",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "milliseconds",
+              "displayName": "milliseconds",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "cost(totals)",
+              "displayName": "cost(totals)",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "ended reason",
+              "displayName": "ended reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "transcript",
+              "displayName": "transcript",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "recording",
+              "displayName": "recording",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -440,
+        200
+      ],
+      "id": "68d519b0-9d6a-44e3-b7d6-68e6a9234ec1",
+      "name": "Raw Data",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "=Mobile",
+              "lookupValue": "=+917021174329"
+            }
+          ]
+        },
+        "options": {
+          "dataLocationOnSheet": {
+            "values": {
+              "rangeDefinition": "detectAutomatically"
+            }
+          }
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "ee53f0e7-2cf0-416d-8351-b7cab4553e9d",
+      "name": "Get ID",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date Time": "={{ $now }}",
+            "Status": "Called",
+            "Attempt": "#Success",
+            "Summary": "={{ $('Webhook').item.json.body.message.summary }}",
+            "Id": "={{ $json.Id }}",
+            "Assignee": "Suresh"
+          },
+          "matchingColumns": [
+            "Id"
+          ],
+          "schema": [
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Id",
+              "displayName": "Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attempt",
+              "displayName": "Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        220,
+        0
+      ],
+      "id": "62c868d6-175f-4455-b7ce-74711afd8201",
+      "name": "Connected Call",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Mobile",
+              "lookupValue": "={{ $('Event = end-of-call-report').item.json.body.message.call.customer.number }}"
+            },
+            {
+              "lookupColumn": "Attempt",
+              "lookupValue": "#1"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        220,
+        200
+      ],
+      "id": "f49e0bbe-dae6-407b-8d6d-e16b2cdb5bc2",
+      "name": "Get ID #1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Mobile",
+              "lookupValue": "={{ $('Event = end-of-call-report').item.json.body.message.call.customer.number }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        220,
+        400
+      ],
+      "id": "7c4e9b96-bf95-4c28-bc13-de391e6f05d7",
+      "name": "Get ID #5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.id }}",
+            "Status": "Failed",
+            "Summary": "={{ $('Event = end-of-call-report').item.json.body.message.analysis.summary }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attempt",
+              "displayName": "Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Call",
+              "displayName": "Final Call",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        440,
+        400
+      ],
+      "id": "ed591995-ed11-4bd3-ae94-eb1b2809e0f2",
+      "name": "Failed Call",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.Id }}",
+            "Status": "Voicemail",
+            "Attempt": "#1",
+            "Summary": "={{ $json.transcript }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attempt",
+              "displayName": "Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Call",
+              "displayName": "Final Call",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        880,
+        0
+      ],
+      "id": "032263be-aab7-4649-802d-d81fc2c70783",
+      "name": "Voicemail attempt #",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('1 Minute').item.json.id }}",
+            "Date Time": "={{ $now }}",
+            "Status": "Voicemail",
+            "Attempt": "#2",
+            "Summary": "={{ $('Event = end-of-call-report').item.json.body.message.analysis.summary }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attempt",
+              "displayName": "Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Call",
+              "displayName": "Final Call",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1540,
+        0
+      ],
+      "id": "7e886ea1-79fb-4fb3-8ec9-1113bc0cfd49",
+      "name": "Voicemail attempt #4",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $('+1 Day AND @ 4:00pm (Optimal Call Time)').item.json.id }}",
+            "Date Time": "={{ $now }}",
+            "Status": "Voicemail",
+            "Attempt": "#3",
+            "Summary": "={{ $('Event = end-of-call-report').item.json.body.message.analysis.summary }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attempt",
+              "displayName": "Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Call",
+              "displayName": "Final Call",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1540,
+        240
+      ],
+      "id": "ee3aee40-019f-412e-8e9f-4955efcc711a",
+      "name": "Voicemail attempt #5",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID": "={{ $json.id }}",
+            "Date Time": "={{ $now }}",
+            "First Name": "{{ $json.id }}",
+            "Status": "Voicemail",
+            "Attempt": "Unreachable",
+            "Summary": "={{ $('Event = end-of-call-report').item.json.body.message.analysis.summary }}"
+          },
+          "matchingColumns": [
+            "ID"
+          ],
+          "schema": [
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "ID",
+              "displayName": "ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attempt",
+              "displayName": "Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Final Call",
+              "displayName": "Final Call",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        1100,
+        440
+      ],
+      "id": "61b7b39a-30c7-4409-a1f1-aee177719f90",
+      "name": "unreachable1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1640,
+        -60
+      ],
+      "id": "16a9b1a9-dbfc-4650-b023-e43b68a1a52e",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "filtersUI": {
+          "values": [
+            {
+              "lookupColumn": "Status",
+              "lookupValue": "TBC"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -1440,
+        -60
+      ],
+      "id": "78c9fbf5-60eb-460a-bd2a-75f59377b81b",
+      "name": "Google Sheets",
+      "notesInFlow": false,
+      "alwaysOutputData": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f3987b86-d025-47c2-ad6c-31ee7986d82b",
+              "name": "ID",
+              "value": "={{ $json.ID }}",
+              "type": "string"
+            },
+            {
+              "id": "cc4d9f6a-6ccd-4138-b180-0a39fcb88622",
+              "name": "First Name ",
+              "value": "={{ $json['First Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "f41f0134-2918-498d-930c-944ad8cd271f",
+              "name": "Mobile",
+              "value": "={{ $json.Mobile }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -1240,
+        -60
+      ],
+      "id": "855b1765-e79b-484b-adb3-40f3e6bc3c6e",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.vapi.ai/call",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "Bearer e109e8f3-6755-4ed0-88fd-ead747ef113a"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\n  \"assistantId\": \"467bb59c-760f-4564-bf05-c36f50f49d15\",\n  \"customer\": {\n    \"name\": \"{{ $json['First Name '] }}\",\n    \"number\": \"{{ $json.Mobile }}\"\n  },\n  \"phoneNumberId\": \"0a80896f-29ab-45b0-8db6-a80713a6fb4f\"\n}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        -960,
+        -60
+      ],
+      "id": "edfa5a2e-cae4-46a7-a439-d241e6e4c45b",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA",
+          "mode": "list",
+          "cachedResultName": "Outbound System",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Leads",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/12APRmh0s-3iCPpbnLZUGIuMqprDamxvxTxZCZWSDikA/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Date Time": "={{ $now }}",
+            "Status": "In-progress",
+            "Id": "={{ $('Google Sheets').item.json.Id }}"
+          },
+          "matchingColumns": [
+            "Id"
+          ],
+          "schema": [
+            {
+              "id": "Date Time",
+              "displayName": "Date Time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Id",
+              "displayName": "Id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "First Name",
+              "displayName": "First Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Last Name",
+              "displayName": "Last Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Mobile",
+              "displayName": "Mobile",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Status",
+              "displayName": "Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Attempt",
+              "displayName": "Attempt",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Summary",
+              "displayName": "Summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Assignee",
+              "displayName": "Assignee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        -720,
+        -60
+      ],
+      "id": "ab51540a-bad2-4693-b08d-f114636b314c",
+      "name": "Google Sheets1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "jUV7UIEbPiCqwi01",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=The calendar ID is: {{ $json.id }}\nThe date and time of the new reservation is: {{ $('Webhook:update').item.json.body.message.toolCalls[0].function.arguments.newRequestedTime }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "# Overview\nYour job is to modify existing appointments.\n\n#Tools\nUpdate Event Tool - Use this tool to update the appointment\n\n#Rules\nUse the Calendar ID that is specified to update the appointment.\nAll appointments are 30 minutes long.\n\n#Output\nOnly output: \"Appointment has been updated\" or \"Unable to update the Appointment\" nothing else."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        160,
+        800
+      ],
+      "id": "9a581d9e-84d7-4bb2-9cb6-bcbd184dc029",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "value": "3efe6410c4f32027c996758575851b815b20c00716c84416e690d30f800ffab7@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "updateFields": {
+          "end": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End', ``, 'string') }}",
+          "guestsCanModify": true,
+          "start": "={{ $('Webhook:update').item.json.body.message.toolCalls[0].function.arguments.newRequestedTime }}",
+          "summary": "Meeting updated\n"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        300,
+        1040
+      ],
+      "id": "679f6594-a25f-48c2-bd6f-0bb29d2cc9e7",
+      "name": "Google Calendar1",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "ipsJjzOLaghEqchT",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n    \"results\": [\n        {\n            \"toolCallId\": \"{{ $('Webhook:update').item.json.body.message.toolCalls[0].id }}\",\n            \"result\": \"{{ $json.output }}\"\n        }\n    ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        800
+      ],
+      "id": "7b6289a4-eece-4975-9299-4bdbee8ba574",
+      "name": "Respond to Webhook"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "3efe6410c4f32027c996758575851b815b20c00716c84416e690d30f800ffab7@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "returnAll": true,
+        "timeMax": "={{ $now.plus({ week: 52 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -360,
+        820
+      ],
+      "id": "75add774-f631-46a6-86bd-bbacd626fc7b",
+      "name": "Google Calendar2",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "ipsJjzOLaghEqchT",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=The calendar ID is: {{ $json.id }}",
+        "hasOutputParser": true,
+        "options": {
+          "systemMessage": "# Overview\nYour job is to cancel existing appointments.\n\n#Tools\nCancel Event Tool - Use this tool to cancel the appointment\n\n#Rules\nUse the Calendar ID that is specified to cancel the appointment\n\n#Output\nOnly output: \"Appointment Canceled\" or \"Unable to cancel the Appointment\" nothing else."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        160,
+        1260
+      ],
+      "id": "4672a3c0-dff7-4e0c-b405-a5b7785d6a0a",
+      "name": "AI Agent1"
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": {
+          "__rl": true,
+          "value": "3efe6410c4f32027c996758575851b815b20c00716c84416e690d30f800ffab7@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "eventId": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('Event_ID', ``, 'string') }}",
+        "options": {
+          "sendUpdates": "all"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        320,
+        1480
+      ],
+      "id": "80b66c19-ce83-4090-8165-9c7c0c4fa42b",
+      "name": "Google Calendar",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "ipsJjzOLaghEqchT",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": {
+          "__rl": true,
+          "value": "3efe6410c4f32027c996758575851b815b20c00716c84416e690d30f800ffab7@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "returnAll": true,
+        "timeMax": "={{ $now.plus({ week: 52 }) }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        -360,
+        1280
+      ],
+      "id": "59df0a73-0f4c-4714-83b5-3a27e58e82e5",
+      "name": "Google Calendar3",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "ipsJjzOLaghEqchT",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "7cf0b972-fc07-459d-a958-6eb598986023",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -240,
+        1700
+      ],
+      "id": "93a0c4e6-8052-4cb9-a493-971b93fa9387",
+      "name": "Webhook2",
+      "webhookId": "7cf0b972-fc07-459d-a958-6eb598986023"
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=The details of the requested appointment are: \n{{ $json.body.message.toolCalls[0].function.arguments.name }}\n{{ $json.body.message.toolCalls[0].function.arguments.phone }}\n{{ $json.body.message.toolCalls[0].function.arguments.requestedTime }}\n{{ $json.body.message.toolCalls[0].function.arguments.email }}\n\n",
+        "options": {
+          "systemMessage": "#Overview\nYou are a helpful assistant that can look up availability and book appointments.\n\n#Tools\nCalendar Availability Tool\nBook Calendar Tool\n\n#Rules \nYou must check availability first before booking an appointment.\nIf the appointment is unavailable get the next 3 closest appointments and output: \"The requested time is unavailable, these times are (the next 3 closest times, do not use \\n in the output)\"\nIf the appointment is available book the requested appointment and output: \"The appointment has been booked\"\nAll appointments are 30 minutes in length"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [
+        20,
+        1700
+      ],
+      "id": "2c772c6f-3b2e-4766-9c5c-cb2485920c2e",
+      "name": "AI Agent2"
+    },
+    {
+      "parameters": {
+        "calendar": {
+          "__rl": true,
+          "value": "3efe6410c4f32027c996758575851b815b20c00716c84416e690d30f800ffab7@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "start": "={{ $fromAI('Start', ``, 'string') }}",
+        "end": "={{ $fromAI('End', ``, 'string') }}",
+        "additionalFields": {
+          "attendees": [
+            "={{ $json.body.message.toolCalls[0].function.arguments.email }}"
+          ],
+          "color": "3",
+          "summary": "=Meeting with  {{ $('Webhook2').item.json.body.message.toolCalls[0].function.arguments.name }}"
+        }
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        80,
+        1880
+      ],
+      "id": "91746c9a-b1e8-413e-93ff-cd1d04fb2a27",
+      "name": "Google Calendar4",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "ipsJjzOLaghEqchT",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "value": "3efe6410c4f32027c996758575851b815b20c00716c84416e690d30f800ffab7@group.calendar.google.com",
+          "mode": "list",
+          "cachedResultName": "n8n"
+        },
+        "timeMin": "={{ $('Webhook2').item.json.body.message.toolCalls[0].function.arguments.requestedTime }}",
+        "timeMax": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('End_Time', ``, 'string') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleCalendarTool",
+      "typeVersion": 1.3,
+      "position": [
+        260,
+        1860
+      ],
+      "id": "29addf48-b26d-4b51-b038-f6de924121a2",
+      "name": "Google Calendar5",
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "ipsJjzOLaghEqchT",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        140,
+        1100
+      ],
+      "id": "aae43ba8-3d50-4b01-be39-a548ba0cd566",
+      "name": "Groq Chat Model",
+      "credentials": {
+        "groqApi": {
+          "id": "mc0mOwUSr8uZRbtl",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        120,
+        1480
+      ],
+      "id": "48daeeb3-6d6a-4525-8de1-7521a2aaf75e",
+      "name": "Groq Chat Model1",
+      "credentials": {
+        "groqApi": {
+          "id": "mc0mOwUSr8uZRbtl",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGroq",
+      "typeVersion": 1,
+      "position": [
+        -60,
+        1880
+      ],
+      "id": "3834fa1c-18af-4756-aff1-13ea0f28e61d",
+      "name": "Groq Chat Model2",
+      "credentials": {
+        "groqApi": {
+          "id": "mc0mOwUSr8uZRbtl",
+          "name": "Groq account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "4578999f-488e-4429-a782-e03bd6ba1321",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -580,
+        820
+      ],
+      "id": "5be1ab01-6c7b-4fe8-8f42-222b7fdbcb50",
+      "name": "Webhook:update",
+      "webhookId": "4578999f-488e-4429-a782-e03bd6ba1321"
+    },
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cbb82cee-1911-479e-a783-dd87df3170aa",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        -540,
+        1320
+      ],
+      "id": "13878648-a74e-4170-82b5-2b6ed2b17c43",
+      "name": "Webhook:cancel",
+      "webhookId": "cbb82cee-1911-479e-a783-dd87df3170aa"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n    \"results\": [\n        {\n            \"toolCallId\": \"{{ $('Webhook:cancel').item.json.body.message.toolCalls[0].id }}\",\n            \"result\": \"{{ $json.output }}\"\n        }\n    ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        560,
+        1260
+      ],
+      "id": "a8db7f97-d740-41f2-bdae-f5b0394f0de4",
+      "name": "Respond to Webhook3"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b262d868-d610-49a7-9e06-1485861b2490",
+              "leftValue": "={{ $json.attendees[0].email }}",
+              "rightValue": "={{ $('Webhook:update').item.json.body.message.toolCalls[0].function.arguments.email }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            },
+            {
+              "id": "78d6a7bf-8f6d-4a20-af2a-cfc07a84f957",
+              "leftValue": "={{ $json.start.dateTime }}",
+              "rightValue": "={{ $('Webhook:update').item.json.body.message.toolCalls[0].function.arguments.currentAppointmentTime }}",
+              "operator": {
+                "type": "string",
+                "operation": "equals",
+                "name": "filter.operator.equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        -140,
+        820
+      ],
+      "id": "6244dfe3-e084-47c0-a53a-8ba176ef1b8f",
+      "name": "If2"
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={\n    \"results\": [\n        {\n            \"toolCallId\": \"{{ $('Webhook2').item.json.body.message.toolCalls[0].id }}\",\n            \"result\": \"{{ $json.output }}\"\n        }\n    ]\n}\n",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        380,
+        1700
+      ],
+      "id": "15dc64ee-71b8-4011-a6f3-3476775e82a4",
+      "name": "Respond to Webhook4"
+    }
+  ],
+  "pinData": {
+    "Call #2": [
+      {
+        "json": {
+          "customernumber": "+18608344382"
+        }
+      }
+    ],
+    "1 Minute": [
+      {
+        "json": {
+          "customernumber": "+18608344382"
+        }
+      }
+    ],
+    "Voicemail attempt #": [
+      {
+        "json": {
+          "customernumber": "+17754855558"
+        }
+      }
+    ],
+    "Webhook:update": [
+      {
+        "json": {
+          "headers": {
+            "host": "krishbhimani.app.n8n.cloud",
+            "user-agent": "axios/1.8.3",
+            "content-length": "12358",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "baggage": "sentry-environment=production,sentry-public_key=a0021577936aec367b16615ad816c078,sentry-trace_id=2ebbeb1dca224c75b2678d7f50524c75",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "35.161.2.220",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "931f6e308011a60a-PDX",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "cookie": "callId=2582f382-e542-452a-b9fa-bb8f0bbb1f6f",
+            "sentry-trace": "2ebbeb1dca224c75b2678d7f50524c75-98cf292494a2f2f3",
+            "traceparent": "00-6801794e000000003a5b35d961dccf58-1bdc0ce746a89003-01",
+            "tracestate": "dd=t.dm:-0;t.tid:6801794e00000000;s:1;p:1bdc0ce746a89003",
+            "x-datadog-parent-id": "2007493721362829315",
+            "x-datadog-sampling-priority": "1",
+            "x-datadog-tags": "_dd.p.tid=6801794e00000000,_dd.p.dm=-0",
+            "x-datadog-trace-id": "4205013884846526296",
+            "x-forwarded-for": "35.161.2.220, 172.68.175.16",
+            "x-forwarded-host": "krishbhimani.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-47-58bbcd9445-vc2jd",
+            "x-is-trusted": "yes",
+            "x-real-ip": "35.161.2.220",
+            "x-vapi-secret": ""
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": {
+              "timestamp": 1744929692044,
+              "type": "tool-calls",
+              "toolCalls": [
+                {
+                  "id": "call_1xQLVjS5eGssRXhmuvehTKcb",
+                  "type": "function",
+                  "function": {
+                    "name": "updateAppointment",
+                    "arguments": {
+                      "email": "sigmamale2404@gmail.com",
+                      "newRequestedTime": "2025-04-19T12:00:00+05:30",
+                      "currentAppointmentTime": "2025-04-19T09:00:00+05:30"
+                    }
+                  },
+                  "isPrecededByText": true
+                }
+              ],
+              "toolCallList": [
+                {
+                  "id": "call_1xQLVjS5eGssRXhmuvehTKcb",
+                  "type": "function",
+                  "function": {
+                    "name": "updateAppointment",
+                    "arguments": {
+                      "email": "sigmamale2404@gmail.com",
+                      "newRequestedTime": "2025-04-19T12:00:00+05:30",
+                      "currentAppointmentTime": "2025-04-19T09:00:00+05:30"
+                    }
+                  },
+                  "isPrecededByText": true
+                }
+              ],
+              "toolWithToolCallList": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "updateAppointment",
+                    "parameters": {
+                      "type": "object",
+                      "required": [
+                        "email",
+                        "currentAppointmentTime",
+                        "newRequestedTime"
+                      ],
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "description": "The email associated with the existing appointment."
+                        },
+                        "newRequestedTime": {
+                          "type": "string",
+                          "description": "The new requested time in ISO 8601 format."
+                        },
+                        "currentAppointmentTime": {
+                          "type": "string",
+                          "description": "The current appointment time in ISO 8601 format."
+                        }
+                      }
+                    },
+                    "description": "Modify or reschedule an existing appointment. Requires email, current appointment time, and new requested time."
+                  },
+                  "async": false,
+                  "server": {
+                    "url": "https://krishbhimani.app.n8n.cloud/webhook-test/4578999f-488e-4429-a782-e03bd6ba1321",
+                    "timeoutSeconds": 30
+                  },
+                  "messages": [],
+                  "toolCall": {
+                    "id": "call_1xQLVjS5eGssRXhmuvehTKcb",
+                    "type": "function",
+                    "function": {
+                      "name": "updateAppointment",
+                      "arguments": {
+                        "email": "sigmamkle2404@gmail.com",
+                        "newRequestedTime": "2025-04-19T12:00:00",
+                        "currentAppointmentTime": "2025-04-19T09:00:00"
+                      }
+                    },
+                    "isPrecededByText": true
+                  }
+                }
+              ],
+              "artifact": {
+                "messages": [
+                  {
+                    "role": "system",
+                    "message": "You are a helpful assistant responsible for booking, canceling, and modifying appointments. For every appointment request, always collect the caller’s name, email, phone number, and the desired date and time. Ensure the time is converted to ISO 8601 format.\n\nBooking Appointments:\n\nTool: Use only the bookCalendar3 tool to check appointment availability and to book appointments.\n\nProcess:\n\nCheck if the requested 30-minute time slot is available using bookCalendar3.\n\nIf the slot is available, proceed to book the appointment with bookCalendar3.\n\nIf the slot is unavailable, do not book; instead, apologize and inform the caller that someone will follow up shortly.\n\nCanceling Appointments:\n\nTool: Use only the cancelAppointment tool to cancel an appointment.\n\nModifying and Changing Appointments:\n\nTool: Use only the updateAppointment tool with date and time of the current reservation to modify or change an existing appointment.\n\nAdditional Context:\n\nWorking Hours: Meetings are available from 9:...",
+                    "time": 1744929632854,
+                    "secondsFromStart": 0
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Hello. I am Laura. How can I help you?",
+                    "time": 1744929634603,
+                    "endTime": 1744929636762.9998,
+                    "secondsFromStart": 1.52,
+                    "duration": 2159.999755859375,
+                    "source": ""
+                  },
+                  {
+                    "role": "user",
+                    "message": "Hi. I I'm Krish. I would like to update my appointment.",
+                    "time": 1744929638423,
+                    "endTime": 1744929641843,
+                    "secondsFromStart": 5.34,
+                    "duration": 3199.999755859375
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Sure, Krish. I can help you with that. Could you please provide me with the following details? 1, your email address associated with the appointment. 2, the current appointment date and time. 3, the new desired date and time for the appointment. Thank you.",
+                    "time": 1744929644123,
+                    "endTime": 1744929660013,
+                    "secondsFromStart": 11.04,
+                    "duration": 15040,
+                    "source": ""
+                  },
+                  {
+                    "role": "user",
+                    "message": "My email address is s I g m a n e Sorry. My current email address is s I g m a m k l e 2 4 0 4 at the rate g mail dot com. And the current appointment time is nineteenth April 20 25 9 AM. And the new appointment time is nineteenth April 20 25, 12 PM.",
+                    "time": 1744929661323,
+                    "endTime": 1744929686133,
+                    "secondsFromStart": 28.24,
+                    "duration": 20890.00390625
+                  },
+                  {
+                    "toolCalls": [
+                      {
+                        "id": "call_1xQLVjS5eGssRXhmuvehTKcb",
+                        "type": "function",
+                        "function": {
+                          "name": "updateAppointment",
+                          "arguments": "{\n  \"email\": \"sigmamkle2404@gmail.com\",\n  \"newRequestedTime\": \"2025-04-19T12:00:00\",\n  \"currentAppointmentTime\": \"2025-04-19T09:00:00\"\n}"
+                        }
+                      }
+                    ],
+                    "role": "tool_calls",
+                    "message": "",
+                    "time": 1744929692042,
+                    "secondsFromStart": 53.867
+                  }
+                ],
+                "messagesOpenAIFormatted": [
+                  {
+                    "role": "system",
+                    "content": "You are a helpful assistant responsible for booking, canceling, and modifying appointments. For every appointment request, always collect the caller’s name, email, phone number, and the desired date and time. Ensure the time is converted to ISO 8601 format.\n\nBooking Appointments:\n\nTool: Use only the bookCalendar3 tool to check appointment availability and to book appointments.\n\nProcess:\n\nCheck if the requested 30-minute time slot is available using bookCalendar3.\n\nIf the slot is available, proceed to book the appointment with bookCalendar3.\n\nIf the slot is unavailable, do not book; instead, apologize and inform the caller that someone will follow up shortly.\n\nCanceling Appointments:\n\nTool: Use only the cancelAppointment tool to cancel an appointment.\n\nModifying and Changing Appointments:\n\nTool: Use only the updateAppointment tool with date and time of the current reservation to modify or change an existing appointment.\n\nAdditional Context:\n\nWorking Hours: Meetings are available from 9:..."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Hello. I am Laura. How can I help you?"
+                  },
+                  {
+                    "role": "user",
+                    "content": "Hi. I I'm Krish. I would like to update my appointment."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Sure, Krish. I can help you with that. Could you please provide me with the following details? 1, your email address associated with the appointment. 2, the current appointment date and time. 3, the new desired date and time for the appointment. Thank you."
+                  },
+                  {
+                    "role": "user",
+                    "content": "My email address is s I g m a n e Sorry. My current email address is s I g m a m k l e 2 4 0 4 at the rate g mail dot com. And the current appointment time is nineteenth April 20 25 9 AM. And the new appointment time is nineteenth April 20 25, 12 PM."
+                  },
+                  {
+                    "role": "assistant",
+                    "tool_calls": [
+                      {
+                        "id": "call_1xQLVjS5eGssRXhmuvehTKcb",
+                        "type": "function",
+                        "function": {
+                          "name": "updateAppointment",
+                          "arguments": "{\n  \"email\": \"sigmamkle2404@gmail.com\",\n  \"newRequestedTime\": \"2025-04-19T12:00:00\",\n  \"currentAppointmentTime\": \"2025-04-19T09:00:00\"\n}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "role": "tool",
+                    "tool_call_id": "call_1xQLVjS5eGssRXhmuvehTKcb",
+                    "content": "Tool Result Still Pending But Proceed Further If Possible."
+                  }
+                ]
+              },
+              "call": {
+                "id": "2582f382-e542-452a-b9fa-bb8f0bbb1f6f",
+                "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                "createdAt": "2025-04-17T22:40:32.777Z",
+                "updatedAt": "2025-04-17T22:40:32.777Z",
+                "type": "webCall",
+                "monitor": {
+                  "listenUrl": "wss://phone-call-websocket.aws-us-west-2-backend-production3.vapi.ai/2582f382-e542-452a-b9fa-bb8f0bbb1f6f/listen",
+                  "controlUrl": "https://phone-call-websocket.aws-us-west-2-backend-production3.vapi.ai/2582f382-e542-452a-b9fa-bb8f0bbb1f6f/control"
+                },
+                "transport": {
+                  "provider": "daily",
+                  "assistantVideoEnabled": false
+                },
+                "webCallUrl": "https://vapi.daily.co/KI4VsLfSpq6dXYjiTK5L",
+                "status": "queued",
+                "assistantId": "6300f54e-1a80-465a-b817-cf829b029a30",
+                "assistantOverrides": {
+                  "clientMessages": [
+                    "transfer-update",
+                    "transcript"
+                  ]
+                }
+              },
+              "assistant": {
+                "id": "6300f54e-1a80-465a-b817-cf829b029a30",
+                "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                "name": "New Assistant",
+                "voice": {
+                  "model": "eleven_turbo_v2_5",
+                  "speed": 1,
+                  "voiceId": "sarah",
+                  "provider": "11labs",
+                  "stability": 0.5,
+                  "similarityBoost": 0.75
+                },
+                "createdAt": "2025-04-17T20:47:40.615Z",
+                "updatedAt": "2025-04-17T22:03:36.483Z",
+                "model": {
+                  "model": "gpt-4o",
+                  "toolIds": [
+                    "4ba929ef-9357-456e-87b9-6a6498f2886e",
+                    "3756b62d-95b5-4bd0-8f46-dee1a1b15e72",
+                    "500709d5-d520-4c4f-a04e-1ad600641f8c"
+                  ],
+                  "messages": [
+                    {
+                      "role": "system",
+                      "content": "You are a helpful assistant responsible for booking, canceling, and modifying appointments. For every appointment request, always collect the caller’s name, email, phone number, and the desired date and time. Ensure the time is converted to ISO 8601 format.\n\nBooking Appointments:\n\nTool: Use only the bookCalendar3 tool to check appointment availability and to book appointments.\n\nProcess:\n\nCheck if the requested 30-minute time slot is available using bookCalendar3.\n\nIf the slot is available, proceed to book the appointment with bookCalendar3.\n\nIf the slot is unavailable, do not book; instead, apologize and inform the caller that someone will follow up shortly.\n\nCanceling Appointments:\n\nTool: Use only the cancelAppointment tool to cancel an appointment.\n\nModifying and Changing Appointments:\n\nTool: Use only the updateAppointment tool with date and time of the current reservation to modify or change an existing appointment.\n\nAdditional Context:\n\nWorking Hours: Meetings are available from 9:00 AM to 2:30 PM (Asia/Kolkata).\n\nCurrent Time: { \"now\" | date: \"%b %d, %Y, %I:%M %p\", \"Asia/Kolkata\" }\n\n"
+                    }
+                  ],
+                  "provider": "openai",
+                  "temperature": 0.5,
+                  "tools": [
+                    {
+                      "id": "4ba929ef-9357-456e-87b9-6a6498f2886e",
+                      "createdAt": "2025-04-17T21:21:15.923Z",
+                      "updatedAt": "2025-04-17T22:35:54.104Z",
+                      "type": "function",
+                      "function": {
+                        "name": "updateAppointment",
+                        "parameters": {
+                          "type": "object",
+                          "required": [
+                            "email",
+                            "currentAppointmentTime",
+                            "newRequestedTime"
+                          ],
+                          "properties": {
+                            "email": {
+                              "type": "string",
+                              "description": "The email associated with the existing appointment."
+                            },
+                            "newRequestedTime": {
+                              "type": "string",
+                              "description": "The new requested time in ISO 8601 format."
+                            },
+                            "currentAppointmentTime": {
+                              "type": "string",
+                              "description": "The current appointment time in ISO 8601 format."
+                            }
+                          }
+                        },
+                        "description": "Modify or reschedule an existing appointment. Requires email, current appointment time, and new requested time."
+                      },
+                      "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                      "server": {
+                        "url": "https://krishbhimani.app.n8n.cloud/webhook-test/4578999f-488e-4429-a782-e03bd6ba1321",
+                        "timeoutSeconds": 30
+                      },
+                      "async": false
+                    },
+                    {
+                      "id": "3756b62d-95b5-4bd0-8f46-dee1a1b15e72",
+                      "createdAt": "2025-04-17T21:20:29.262Z",
+                      "updatedAt": "2025-04-17T22:14:06.186Z",
+                      "type": "function",
+                      "function": {
+                        "name": "cancelAppointment",
+                        "parameters": {
+                          "type": "object",
+                          "required": [
+                            "email",
+                            "appointmentTime"
+                          ],
+                          "properties": {
+                            "email": {
+                              "type": "string",
+                              "description": "The email associated with the appointment."
+                            },
+                            "appointmentTime": {
+                              "type": "string",
+                              "description": "The time of the appointment to cancel in ISO 8601 format."
+                            }
+                          }
+                        },
+                        "description": "Cancel an existing appointment. Requires email and the appointment time to be cancelled."
+                      },
+                      "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                      "server": {
+                        "url": "https://krishbhimani.app.n8n.cloud/webhook/cbb82cee-1911-479e-a783-dd87df3170aa",
+                        "timeoutSeconds": 30
+                      },
+                      "async": false
+                    },
+                    {
+                      "id": "500709d5-d520-4c4f-a04e-1ad600641f8c",
+                      "createdAt": "2025-04-17T21:19:58.601Z",
+                      "updatedAt": "2025-04-17T22:29:06.681Z",
+                      "type": "function",
+                      "function": {
+                        "name": "bookCalendar3",
+                        "parameters": {
+                          "type": "object",
+                          "required": [
+                            "name",
+                            "email",
+                            "phone",
+                            "requestedTime"
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "The full name of the person booking the appointment."
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "The email address of the person."
+                            },
+                            "phone": {
+                              "type": "string",
+                              "description": "The phone number of the person."
+                            },
+                            "requestedTime": {
+                              "type": "string",
+                              "description": "The requested time in ISO 8601 format, e.g., 2025-02-12T11:00:00."
+                            }
+                          }
+                        },
+                        "description": "Check if the requested slot is available and book the appointment if it is. Accepts name, email, phone, and requested time."
+                      },
+                      "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                      "server": {
+                        "url": "https://krishbhimani.app.n8n.cloud/webhook-test/7cf0b972-fc07-459d-a958-6eb598986023",
+                        "timeoutSeconds": 30
+                      },
+                      "async": false
+                    }
+                  ]
+                },
+                "firstMessage": "Hello. I am Laura, How can I help you?",
+                "voicemailMessage": "Please call back when you're available.",
+                "endCallFunctionEnabled": false,
+                "endCallMessage": "Goodbye.",
+                "transcriber": {
+                  "model": "nova-3",
+                  "language": "en",
+                  "numerals": false,
+                  "provider": "deepgram",
+                  "endpointing": 300,
+                  "confidenceThreshold": 0.4
+                },
+                "clientMessages": [
+                  "conversation-update",
+                  "function-call",
+                  "hang",
+                  "model-output",
+                  "speech-update",
+                  "status-update",
+                  "transfer-update",
+                  "transcript",
+                  "tool-calls",
+                  "user-interrupted",
+                  "voice-input",
+                  "workflow.node.started"
+                ],
+                "serverMessages": [
+                  "tool-calls"
+                ],
+                "hipaaEnabled": false,
+                "backchannelingEnabled": false,
+                "voicemailDetection": {
+                  "provider": "google",
+                  "voicemailExpectedDurationSeconds": 15
+                },
+                "backgroundDenoisingEnabled": false,
+                "startSpeakingPlan": {
+                  "waitSeconds": 0.6,
+                  "smartEndpointingEnabled": "livekit"
+                }
+              }
+            }
+          },
+          "webhookUrl": "https://krishbhimani.app.n8n.cloud/webhook-test/4578999f-488e-4429-a782-e03bd6ba1321",
+          "executionMode": "test"
+        }
+      }
+    ],
+    "Webhook:cancel": [
+      {
+        "json": {
+          "headers": {
+            "host": "krishbhimani.app.n8n.cloud",
+            "user-agent": "axios/1.8.3",
+            "content-length": "10735",
+            "accept": "application/json, text/plain, */*",
+            "accept-encoding": "gzip, br",
+            "baggage": "sentry-environment=production,sentry-public_key=a0021577936aec367b16615ad816c078,sentry-trace_id=6a99a4ae99d64980b646d02c9a99fc10",
+            "cdn-loop": "cloudflare; loops=1; subreqs=1",
+            "cf-connecting-ip": "35.91.118.149",
+            "cf-ew-via": "15",
+            "cf-ipcountry": "US",
+            "cf-ray": "931f873d332c3abd-PDX",
+            "cf-visitor": "{\"scheme\":\"https\"}",
+            "cf-worker": "n8n.cloud",
+            "content-type": "application/json",
+            "cookie": "callId=a10adc34-4f24-4cf1-8aed-64bed8b07b46",
+            "sentry-trace": "6a99a4ae99d64980b646d02c9a99fc10-99de92a18af5b49c",
+            "traceparent": "00-6801879e0000000073e0392f46712191-73e0392f46712191-00",
+            "tracestate": "dd=t.tid:6801879e00000000;t.dm:-1;s:0;p:73e0392f46712191",
+            "x-datadog-parent-id": "8349736584352965009",
+            "x-datadog-sampling-priority": "0",
+            "x-datadog-tags": "_dd.p.tid=6801879e00000000",
+            "x-datadog-trace-id": "8349736584352965009",
+            "x-forwarded-for": "35.91.118.149, 172.68.174.164",
+            "x-forwarded-host": "krishbhimani.app.n8n.cloud",
+            "x-forwarded-port": "443",
+            "x-forwarded-proto": "https",
+            "x-forwarded-server": "traefik-prod-users-gwc-47-58bbcd9445-vc2jd",
+            "x-is-trusted": "yes",
+            "x-real-ip": "35.91.118.149",
+            "x-vapi-secret": ""
+          },
+          "params": {},
+          "query": {},
+          "body": {
+            "message": {
+              "timestamp": 1744930718051,
+              "type": "tool-calls",
+              "toolCalls": [
+                {
+                  "id": "call_JtCybasDHfh8ikQ0AKUu7r0I",
+                  "type": "function",
+                  "function": {
+                    "name": "cancelAppointment",
+                    "arguments": {
+                      "email": "sigmamail@gmail.com",
+                      "appointmentTime": "2025-04-19T12:00:00+05:30"
+                    }
+                  }
+                }
+              ],
+              "toolCallList": [
+                {
+                  "id": "call_JtCybasDHfh8ikQ0AKUu7r0I",
+                  "type": "function",
+                  "function": {
+                    "name": "cancelAppointment",
+                    "arguments": {
+                      "email": "sigmamail@gmail.com",
+                      "appointmentTime": "2025-04-19T12:00:00+05:30"
+                    }
+                  }
+                }
+              ],
+              "toolWithToolCallList": [
+                {
+                  "type": "function",
+                  "function": {
+                    "name": "cancelAppointment",
+                    "parameters": {
+                      "type": "object",
+                      "required": [
+                        "email",
+                        "appointmentTime"
+                      ],
+                      "properties": {
+                        "email": {
+                          "type": "string",
+                          "description": "The email associated with the appointment."
+                        },
+                        "appointmentTime": {
+                          "type": "string",
+                          "description": "The time of the appointment to cancel in ISO 8601 format."
+                        }
+                      }
+                    },
+                    "description": "Cancel an existing appointment. Requires email and the appointment time to be cancelled."
+                  },
+                  "async": false,
+                  "server": {
+                    "url": "https://krishbhimani.app.n8n.cloud/webhook-test/cbb82cee-1911-479e-a783-dd87df3170aa",
+                    "timeoutSeconds": 30
+                  },
+                  "messages": [],
+                  "toolCall": {
+                    "id": "call_JtCybasDHfh8ikQ0AKUu7r0I",
+                    "type": "function",
+                    "function": {
+                      "name": "cancelAppointment",
+                      "arguments": {
+                        "email": "sigma.mail@gmail.com",
+                        "appointmentTime": "2025-04-19T12:00:00"
+                      }
+                    }
+                  }
+                }
+              ],
+              "artifact": {
+                "messages": [
+                  {
+                    "role": "system",
+                    "message": "You are a helpful assistant responsible for booking, canceling, and modifying appointments. For every appointment request, always collect the caller’s name, email, phone number, and the desired date and time. Ensure the time is converted to ISO 8601 format.\n\nBooking Appointments:\n\nTool: Use only the bookCalendar3 tool to check appointment availability and to book appointments.\n\nProcess:\n\nCheck if the requested 30-minute time slot is available using bookCalendar3.\n\nIf the slot is available, proceed to book the appointment with bookCalendar3.\n\nIf the slot is unavailable, do not book; instead, apologize and inform the caller that someone will follow up shortly.\n\nCanceling Appointments:\n\nTool: Use only the cancelAppointment tool to cancel an appointment.\n\nModifying and Changing Appointments:\n\nTool: Use only the updateAppointment tool with date and time of the current reservation to modify or change an existing appointment.\n\nAdditional Context:\n\nWorking Hours: Meetings are available from 9:...",
+                    "time": 1744930693974,
+                    "secondsFromStart": 0
+                  },
+                  {
+                    "role": "bot",
+                    "message": "Hello. I am Laura. How can I help you?",
+                    "time": 1744930695362,
+                    "endTime": 1744930697522,
+                    "secondsFromStart": 1.12,
+                    "duration": 2160,
+                    "source": ""
+                  },
+                  {
+                    "role": "user",
+                    "message": "Hi. I'm Kirish, and I would like to cancel my appointment. My email ID is sigma mail at g mail dot com. And the appointment time is nineteenth April 20 25. 12 PM.",
+                    "time": 1744930699182,
+                    "endTime": 1744930711052,
+                    "secondsFromStart": 4.94,
+                    "duration": 10880.00048828125
+                  },
+                  {
+                    "toolCalls": [
+                      {
+                        "id": "call_JtCybasDHfh8ikQ0AKUu7r0I",
+                        "type": "function",
+                        "function": {
+                          "name": "cancelAppointment",
+                          "arguments": "{\n  \"email\": \"sigma.mail@gmail.com\",\n  \"appointmentTime\": \"2025-04-19T12:00:00\"\n}"
+                        }
+                      }
+                    ],
+                    "role": "tool_calls",
+                    "message": "",
+                    "time": 1744930718048,
+                    "secondsFromStart": 17.769
+                  }
+                ],
+                "messagesOpenAIFormatted": [
+                  {
+                    "role": "system",
+                    "content": "You are a helpful assistant responsible for booking, canceling, and modifying appointments. For every appointment request, always collect the caller’s name, email, phone number, and the desired date and time. Ensure the time is converted to ISO 8601 format.\n\nBooking Appointments:\n\nTool: Use only the bookCalendar3 tool to check appointment availability and to book appointments.\n\nProcess:\n\nCheck if the requested 30-minute time slot is available using bookCalendar3.\n\nIf the slot is available, proceed to book the appointment with bookCalendar3.\n\nIf the slot is unavailable, do not book; instead, apologize and inform the caller that someone will follow up shortly.\n\nCanceling Appointments:\n\nTool: Use only the cancelAppointment tool to cancel an appointment.\n\nModifying and Changing Appointments:\n\nTool: Use only the updateAppointment tool with date and time of the current reservation to modify or change an existing appointment.\n\nAdditional Context:\n\nWorking Hours: Meetings are available from 9:..."
+                  },
+                  {
+                    "role": "assistant",
+                    "content": "Hello. I am Laura. How can I help you?"
+                  },
+                  {
+                    "role": "user",
+                    "content": "Hi. I'm Kirish, and I would like to cancel my appointment. My email ID is sigma mail at g mail dot com. And the appointment time is nineteenth April 20 25. 12 PM."
+                  },
+                  {
+                    "role": "assistant",
+                    "tool_calls": [
+                      {
+                        "id": "call_JtCybasDHfh8ikQ0AKUu7r0I",
+                        "type": "function",
+                        "function": {
+                          "name": "cancelAppointment",
+                          "arguments": "{\n  \"email\": \"sigma.mail@gmail.com\",\n  \"appointmentTime\": \"2025-04-19T12:00:00\"\n}"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "role": "tool",
+                    "tool_call_id": "call_JtCybasDHfh8ikQ0AKUu7r0I",
+                    "content": "Tool Result Still Pending But Proceed Further If Possible."
+                  }
+                ]
+              },
+              "call": {
+                "id": "a10adc34-4f24-4cf1-8aed-64bed8b07b46",
+                "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                "createdAt": "2025-04-17T22:58:13.906Z",
+                "updatedAt": "2025-04-17T22:58:13.906Z",
+                "type": "webCall",
+                "monitor": {
+                  "listenUrl": "wss://phone-call-websocket.aws-us-west-2-backend-production3.vapi.ai/a10adc34-4f24-4cf1-8aed-64bed8b07b46/listen",
+                  "controlUrl": "https://phone-call-websocket.aws-us-west-2-backend-production3.vapi.ai/a10adc34-4f24-4cf1-8aed-64bed8b07b46/control"
+                },
+                "transport": {
+                  "provider": "daily",
+                  "assistantVideoEnabled": false
+                },
+                "webCallUrl": "https://vapi.daily.co/qN8Y3YLfT4BMSa1zaeHO",
+                "status": "queued",
+                "assistantId": "6300f54e-1a80-465a-b817-cf829b029a30",
+                "assistantOverrides": {
+                  "clientMessages": [
+                    "transfer-update",
+                    "transcript"
+                  ]
+                }
+              },
+              "assistant": {
+                "id": "6300f54e-1a80-465a-b817-cf829b029a30",
+                "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                "name": "New Assistant",
+                "voice": {
+                  "model": "eleven_turbo_v2_5",
+                  "speed": 1,
+                  "voiceId": "sarah",
+                  "provider": "11labs",
+                  "stability": 0.5,
+                  "similarityBoost": 0.75
+                },
+                "createdAt": "2025-04-17T20:47:40.615Z",
+                "updatedAt": "2025-04-17T22:03:36.483Z",
+                "model": {
+                  "model": "gpt-4o",
+                  "toolIds": [
+                    "4ba929ef-9357-456e-87b9-6a6498f2886e",
+                    "3756b62d-95b5-4bd0-8f46-dee1a1b15e72",
+                    "500709d5-d520-4c4f-a04e-1ad600641f8c"
+                  ],
+                  "messages": [
+                    {
+                      "role": "system",
+                      "content": "You are a helpful assistant responsible for booking, canceling, and modifying appointments. For every appointment request, always collect the caller’s name, email, phone number, and the desired date and time. Ensure the time is converted to ISO 8601 format.\n\nBooking Appointments:\n\nTool: Use only the bookCalendar3 tool to check appointment availability and to book appointments.\n\nProcess:\n\nCheck if the requested 30-minute time slot is available using bookCalendar3.\n\nIf the slot is available, proceed to book the appointment with bookCalendar3.\n\nIf the slot is unavailable, do not book; instead, apologize and inform the caller that someone will follow up shortly.\n\nCanceling Appointments:\n\nTool: Use only the cancelAppointment tool to cancel an appointment.\n\nModifying and Changing Appointments:\n\nTool: Use only the updateAppointment tool with date and time of the current reservation to modify or change an existing appointment.\n\nAdditional Context:\n\nWorking Hours: Meetings are available from 9:00 AM to 2:30 PM (Asia/Kolkata).\n\nCurrent Time: { \"now\" | date: \"%b %d, %Y, %I:%M %p\", \"Asia/Kolkata\" }\n\n"
+                    }
+                  ],
+                  "provider": "openai",
+                  "temperature": 0.5,
+                  "tools": [
+                    {
+                      "id": "4ba929ef-9357-456e-87b9-6a6498f2886e",
+                      "createdAt": "2025-04-17T21:21:15.923Z",
+                      "updatedAt": "2025-04-17T22:35:54.104Z",
+                      "type": "function",
+                      "function": {
+                        "name": "updateAppointment",
+                        "parameters": {
+                          "type": "object",
+                          "required": [
+                            "email",
+                            "currentAppointmentTime",
+                            "newRequestedTime"
+                          ],
+                          "properties": {
+                            "email": {
+                              "type": "string",
+                              "description": "The email associated with the existing appointment."
+                            },
+                            "newRequestedTime": {
+                              "type": "string",
+                              "description": "The new requested time in ISO 8601 format."
+                            },
+                            "currentAppointmentTime": {
+                              "type": "string",
+                              "description": "The current appointment time in ISO 8601 format."
+                            }
+                          }
+                        },
+                        "description": "Modify or reschedule an existing appointment. Requires email, current appointment time, and new requested time."
+                      },
+                      "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                      "server": {
+                        "url": "https://krishbhimani.app.n8n.cloud/webhook-test/4578999f-488e-4429-a782-e03bd6ba1321",
+                        "timeoutSeconds": 30
+                      },
+                      "async": false
+                    },
+                    {
+                      "id": "3756b62d-95b5-4bd0-8f46-dee1a1b15e72",
+                      "createdAt": "2025-04-17T21:20:29.262Z",
+                      "updatedAt": "2025-04-17T22:50:14.555Z",
+                      "type": "function",
+                      "function": {
+                        "name": "cancelAppointment",
+                        "parameters": {
+                          "type": "object",
+                          "required": [
+                            "email",
+                            "appointmentTime"
+                          ],
+                          "properties": {
+                            "email": {
+                              "type": "string",
+                              "description": "The email associated with the appointment."
+                            },
+                            "appointmentTime": {
+                              "type": "string",
+                              "description": "The time of the appointment to cancel in ISO 8601 format."
+                            }
+                          }
+                        },
+                        "description": "Cancel an existing appointment. Requires email and the appointment time to be cancelled."
+                      },
+                      "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                      "server": {
+                        "url": "https://krishbhimani.app.n8n.cloud/webhook-test/cbb82cee-1911-479e-a783-dd87df3170aa",
+                        "timeoutSeconds": 30
+                      },
+                      "async": false
+                    },
+                    {
+                      "id": "500709d5-d520-4c4f-a04e-1ad600641f8c",
+                      "createdAt": "2025-04-17T21:19:58.601Z",
+                      "updatedAt": "2025-04-17T22:29:06.681Z",
+                      "type": "function",
+                      "function": {
+                        "name": "bookCalendar3",
+                        "parameters": {
+                          "type": "object",
+                          "required": [
+                            "name",
+                            "email",
+                            "phone",
+                            "requestedTime"
+                          ],
+                          "properties": {
+                            "name": {
+                              "type": "string",
+                              "description": "The full name of the person booking the appointment."
+                            },
+                            "email": {
+                              "type": "string",
+                              "description": "The email address of the person."
+                            },
+                            "phone": {
+                              "type": "string",
+                              "description": "The phone number of the person."
+                            },
+                            "requestedTime": {
+                              "type": "string",
+                              "description": "The requested time in ISO 8601 format, e.g., 2025-02-12T11:00:00."
+                            }
+                          }
+                        },
+                        "description": "Check if the requested slot is available and book the appointment if it is. Accepts name, email, phone, and requested time."
+                      },
+                      "orgId": "53844129-42cf-4d35-82dc-e94d18a4da8a",
+                      "server": {
+                        "url": "https://krishbhimani.app.n8n.cloud/webhook-test/7cf0b972-fc07-459d-a958-6eb598986023",
+                        "timeoutSeconds": 30
+                      },
+                      "async": false
+                    }
+                  ]
+                },
+                "firstMessage": "Hello. I am Laura, How can I help you?",
+                "voicemailMessage": "Please call back when you're available.",
+                "endCallFunctionEnabled": false,
+                "endCallMessage": "Goodbye.",
+                "transcriber": {
+                  "model": "nova-3",
+                  "language": "en",
+                  "numerals": false,
+                  "provider": "deepgram",
+                  "endpointing": 300,
+                  "confidenceThreshold": 0.4
+                },
+                "clientMessages": [
+                  "conversation-update",
+                  "function-call",
+                  "hang",
+                  "model-output",
+                  "speech-update",
+                  "status-update",
+                  "transfer-update",
+                  "transcript",
+                  "tool-calls",
+                  "user-interrupted",
+                  "voice-input",
+                  "workflow.node.started"
+                ],
+                "serverMessages": [
+                  "tool-calls"
+                ],
+                "hipaaEnabled": false,
+                "backchannelingEnabled": false,
+                "voicemailDetection": {
+                  "provider": "google",
+                  "voicemailExpectedDurationSeconds": 15
+                },
+                "backgroundDenoisingEnabled": false,
+                "startSpeakingPlan": {
+                  "waitSeconds": 0.6,
+                  "smartEndpointingEnabled": "livekit"
+                }
+              }
+            }
+          },
+          "webhookUrl": "https://krishbhimani.app.n8n.cloud/webhook-test/cbb82cee-1911-479e-a783-dd87df3170aa",
+          "executionMode": "test"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Event = tool-call1 OR end-of-call-report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Condition = Answered": {
+      "main": [
+        [
+          {
+            "node": "Get ID",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Condition = Voicemail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Condition = Voicemail": {
+      "main": [
+        [
+          {
+            "node": "Get ID #1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Get ID #5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "First Call": {
+      "main": [
+        [
+          {
+            "node": "Voicemail attempt #",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "First Call - Recapture",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "First Call - Recapture": {
+      "main": [
+        [
+          {
+            "node": "Voicemail attempt #",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Third Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Third Call": {
+      "main": [
+        [
+          {
+            "node": "+1 Day AND @ 4:00pm (Optimal Call Time)",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "unreachable1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call #2": {
+      "main": [
+        [
+          {
+            "node": "Voicemail attempt #4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Call #3": {
+      "main": [
+        [
+          {
+            "node": "Voicemail attempt #5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event = end-of-call-report": {
+      "main": [
+        [
+          {
+            "node": "Raw Data",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1 Minute": {
+      "main": [
+        [
+          {
+            "node": "Call #2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "+1 Day AND @ 4:00pm (Optimal Call Time)": {
+      "main": [
+        [
+          {
+            "node": "Call #3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Wait for End Report": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook1": {
+      "main": [
+        [
+          {
+            "node": "Event = end-of-call-report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Wait for End Report",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Respond to Webhook2": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Customer Number1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Event = tool-call1 OR end-of-call-report": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Customer Number1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Raw Data": {
+      "main": [
+        [
+          {
+            "node": "Condition = Answered",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get ID": {
+      "main": [
+        [
+          {
+            "node": "Connected Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get ID #1": {
+      "main": [
+        [
+          {
+            "node": "First Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get ID #5": {
+      "main": [
+        [
+          {
+            "node": "Failed Call",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Voicemail attempt #": {
+      "main": [
+        [
+          {
+            "node": "1 Minute",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar2": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent1": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar3": {
+      "main": [
+        [
+          {
+            "node": "If2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent2": {
+      "main": [
+        [
+          {
+            "node": "Respond to Webhook4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar4": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Calendar5": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent1",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Groq Chat Model2": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent2",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook:update": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Webhook:cancel": {
+      "main": [
+        [
+          {
+            "node": "Google Calendar3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If2": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "95cb0ab9-401b-4bfd-8af2-7eac2d9c78fe",
+  "meta": {
+    "instanceId": "a6170f088c029dc5870fb1497cac3bee0bb69d404d0ca0454f2d46334a238fc0"
+  },
+  "id": "7gZM2HAlvXJctRT2",
+  "tags": []
+}
