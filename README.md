@@ -5,7 +5,9 @@ An intelligent outbound call automation and appointment booking pipeline that qu
 ### Watch the Demo
 Check out the demo video to see the workflow in action:
 
-[![Watch the Video](https://img.youtube.com/vi/PefjZTLerwc/hqdefault.jpg)](https://www.youtube.com/watch?v=PefjZTLerwc)
+![Watch the Video](https://www.youtube.com/watch?v=PefjZTLerwc)
+
+---
 
 ![Workflow Screenshot](./assets/Complete_workflow.png)
 
