@@ -55,7 +55,7 @@ An intelligent outbound call automation and appointment booking pipeline that qu
 
 ---
 
-![Lead Flow](./assets/lead_qualify.png)
+[comment]: ![Lead Flow](./assets/lead_qualify.png)
 
 ![Call Flow](./assets/call.png)
 
