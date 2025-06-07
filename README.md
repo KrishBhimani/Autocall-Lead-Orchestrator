@@ -2,10 +2,6 @@
 
 An intelligent outbound call automation and appointment booking pipeline that qualifies leads, schedules appointments, and syncs data with your CRM — all without lifting a finger.
 
-### Watch the Demo
-Check out the demo video to see the workflow in action:
-
-[Watch the Video](https://www.youtube.com/watch?v=PefjZTLerwc)
 
 ---
 
