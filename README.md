@@ -5,7 +5,7 @@ An intelligent outbound call automation and appointment booking pipeline that qu
 
 ---
 
-![Workflow Screenshot](./assets/Complete_workflow.png)
+![workflow](./assets/workflow.jpg)
 
 ---
 
@@ -49,12 +49,6 @@ An intelligent outbound call automation and appointment booking pipeline that qu
 
 ---
 
-## Workflow
-
-![workflow](./assets/workflow.jpg)
-
-
----
 
 ## 🧩 Use Cases
 
